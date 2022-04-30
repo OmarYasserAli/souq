@@ -506,7 +506,7 @@
                                                 @foreach($category['childes'] as $subCategory)
                                                     <li class="dropdown">
                                                         <a class="dropdown-item <?php if ($subCategory->childes->count() > 0) echo "dropdown-toggle"?> "
-                                                           <?php if ($subCategory->childes->count() > 0) echo "data-toggle='dropdown'"?> href="{{route('products',['id'=> $subCategory['id'],'data_from'=>'category','page'=>1])}}">
+                                                           <?php if  ($subCategory->childes->count() > 0) echo "data-toggle='dropdown'"?> href="{{route('products',['id'=> $subCategory['id'],'data_from'=>'category','page'=>1])}}">
                                                             <span
                                                                 class="{{Session::get('direction') === "rtl" ? 'pr-3' : 'pl-3'}}">{{$subCategory['name']}}</span>
                                                         </a>
@@ -532,7 +532,7 @@
                     </ul>
                     <!-- Primary menu-->
                     <ul class="navbar-nav" style="{{Session::get('direction') === "rtl" ? 'padding-right: 0px' : ''}}">
-                        <li class="nav-item dropdown active}}">
+                        <li class="nav-item dropdown active">
                             <a class="nav-link" href="{{route('home')}}">{{ \App\CPU\translate('Home')}}</a>
                         </li>
 
@@ -604,11 +604,12 @@
 
                         @if(isset($countries))
                             <li class="nav-item">
-                                <div class="dropdown">
+                               <div class="row">
+                                <div class="dropdown row">
                                     <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                             style="color: white;margin-top: 5px; padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0">
-                                        {{ \App\CPU\translate('country filter')}} 
+                                        {{ \App\CPU\translate('country')}} 
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                                         style="min-width: 165px !important; text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
@@ -618,10 +619,13 @@
                                             </a>
                                             <div class="dropdown-divider"></div>
                                         @endforeach
-                                        
-                                        
+                                       
+                                     
                                     </div>
+                                    
                                 </div>
+                               
+                               </div>
                             </li>
                         @endif
 
@@ -654,8 +658,13 @@
             </div>
         </div>
     </div>
-</header>
 
+</header>
+<div class="row">
+    <div class='container'>
+        Egypt
+    </div>
+</div>
 <script>
 function myFunction() {
   $('#anouncement').addClass('d-none').removeClass('d-flex')

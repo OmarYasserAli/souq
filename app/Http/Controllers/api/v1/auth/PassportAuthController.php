@@ -9,11 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use function App\CPU\translate;
-
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
+use Illuminate\Support\Facades\Http;
 class PassportAuthController extends Controller
 {
     public function register(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'f_name' => 'required',
             'l_name' => 'required',
@@ -28,7 +31,23 @@ class PassportAuthController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
+
+                /**/
+        $response = Http::withHeaders([
+         ])->post('https://services.tshoop.net/services/public/api/register', [
+                "name"=>$request->f_name,
+                "email"=>$request->email,
+                "phone_number"=>$request->phone,
+                 'password' => $request->password,
+            ]);
+
+                $statusCode = $response->status();
+                $responseBody = json_decode($response->getBody(), true);
+                
+
+            /***/
         $temporary_token = Str::random(40);
+        $user='';
         $user = User::create([
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
@@ -39,17 +58,18 @@ class PassportAuthController extends Controller
             'temporary_token' => $temporary_token,
         ]);
 
+
         $phone_verification = Helpers::get_business_settings('phone_verification');
         $email_verification = Helpers::get_business_settings('email_verification');
         if ($phone_verification && !$user->is_phone_verified) {
-            return response()->json(['temporary_token' => $temporary_token], 200);
+            return response()->json([['temporary_token' => $temporary_token],$responseBody], 200);
         }
         if ($email_verification && !$user->is_email_verified) {
-            return response()->json(['temporary_token' => $temporary_token], 200);
+            return response()->json([['temporary_token' => $temporary_token],$responseBody], 200);
         }
 
         $token = $user->createToken('LaravelAuthApp')->accessToken;
-        return response()->json(['token' => $token], 200);
+        return response()->json([['token' => $token],$responseBody], 200);
     }
 
     public function login(Request $request)
@@ -84,23 +104,38 @@ class PassportAuthController extends Controller
             'password' => $request->password
         ];
 
+        
         $user = User::where([$medium => $user_id])->first();
 
         if (isset($user) && $user->is_active && auth()->attempt($data)) {
             $user->temporary_token = Str::random(40);
             $user->save();
+            $response = Http::withHeaders([
+
+            ])->post('https://services.tshoop.net/services/public/api/login', [
+                 'email' => 'admin@demo.com',
+                  'password' => 'secret@5admin',
+            ]);
+
+                $statusCode = $response->status();
+                $responseBody = json_decode($response->getBody(), true);
+               
+               
+
+        
 
             $phone_verification = Helpers::get_business_settings('phone_verification');
             $email_verification = Helpers::get_business_settings('email_verification');
+
             if ($phone_verification && !$user->is_phone_verified) {
-                return response()->json(['temporary_token' => $user->temporary_token], 200);
+                return response()->json([['temporary_token' => $user->temporary_token],$responseBody], 200);
             }
             if ($email_verification && !$user->is_email_verified) {
-                return response()->json(['temporary_token' => $user->temporary_token], 200);
+                return response()->json([['temporary_token' => $user->temporary_token],$responseBody], 200);
             }
 
             $token = auth()->user()->createToken('LaravelAuthApp')->accessToken;
-            return response()->json(['token' => $token], 200);
+            return response()->json([['token' => $token],$responseBody], 200);
         } else {
             $errors = [];
             array_push($errors, ['code' => 'auth-001', 'message' => translate('Customer_not_found_or_Account_has_been_suspended')]);

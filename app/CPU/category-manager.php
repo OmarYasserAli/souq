@@ -19,11 +19,13 @@ class CategoryManager
         return $x;
     }
 
-    public static function products($category_id)
+    public static function products($category_id,$country_code , $city_id)
     {
+        Product::$city=$city_id;
+        Product::$country=$country_code;
         $id = '"'.$category_id.'"';
         return Product::active()
-            ->where('category_ids', 'like', "%{$id}%")->get();
+            ->where('category_ids', 'like', "%{$id}%")->CountryFilter()->get();
             /*->whereJsonContains('category_ids', ["id" => (string)$data['id']])*/
     }
 }

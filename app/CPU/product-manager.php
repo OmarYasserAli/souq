@@ -16,9 +16,13 @@ class ProductManager
         return Product::active()->with(['rating'])->where('id', $id)->first();
     }
 
-    public static function get_latest_products($limit = 10, $offset = 1)
+    public static function get_latest_products($limit = 10, $offset = 1 ,$country_code , $city_id)
     {
-        $paginator = Product::active()->with(['rating'])->latest()->paginate($limit, ['*'], 'page', $offset);
+        Product::$city=$city_id;
+        Product::$country=$country_code;
+
+        $paginator = Product::active()->with(['rating'])
+        ->CountryFilter()->latest()->paginate($limit, ['*'], 'page', $offset);
         /*$paginator->count();*/
         return [
             'total_size' => $paginator->total(),
@@ -28,10 +32,12 @@ class ProductManager
         ];
     }
 
-    public static function get_featured_products($limit = 10, $offset = 1)
+    public static function get_featured_products($limit = 10, $offset = 1,$country_code , $city_id)
     {
+        Product::$city=$city_id;
+        Product::$country=$country_code;
         //change review to ratting
-        $paginator = Product::with(['rating'])->active()
+        $paginator = Product::with(['rating'])->active()->CountryFilter()
             ->where('featured', 1)
             ->withCount(['order_details'])->orderBy('order_details_count', 'DESC')
             ->paginate($limit, ['*'], 'page', $offset);
@@ -44,7 +50,7 @@ class ProductManager
         ];
     }
 
-    public static function get_top_rated_products($limit = 10, $offset = 1)
+    public static function get_top_rated_products($limit = 10, $offset = 1 ,$country_code , $city_id)
     {
         // $reviews = Review::with('product')
         //     ->whereHas('product', function ($query) {
@@ -60,7 +66,10 @@ class ProductManager
         //     array_push($data, $review->product);
         // }
         //change review to ratting
+        Product::$city=$city_id;
+        Product::$country=$country_code;
         $reviews = Product::with(['rating'])->active()
+        ->CountryFilter()
         ->where('featured', 1)
         ->withCount(['reviews'])->orderBy('reviews_count', 'DESC')
         ->paginate($limit, ['*'], 'page', $offset);
@@ -73,13 +82,16 @@ class ProductManager
         ];
     }
 
-    public static function get_best_selling_products($limit = 10, $offset = 1)
+    public static function get_best_selling_products($limit = 10, $offset = 1,$country_code , $city_id)
     {
+        Product::$city=$city_id;
+        Product::$country=$country_code;
         //change reviews to rattings
         $paginator = OrderDetail::with('product.rating')
             ->whereHas('product', function ($query) {
-                $query->active();
+                $query->CountryFilter()->active();
             })
+            
             ->select('product_id', DB::raw('COUNT(product_id) as count'))
             ->groupBy('product_id')
             ->orderBy("count", 'desc')
@@ -110,9 +122,12 @@ class ProductManager
     public static function search_products($name, $limit = 10, $offset = 1)
     {
         /*$key = explode(' ', $name);*/
+        Product::$city=$city_id;
+        Product::$country=$country_code;
         $key = [base64_decode($name)];
 
-        $paginator = Product::active()->with(['rating'])->where(function ($q) use ($key) {
+        $paginator = Product::active()->with(['rating'])->CountryFilter()
+        ->where(function ($q) use ($key) {
             foreach ($key as $value) {
                 $q->orWhere('name', 'like', "%{$value}%");
             }

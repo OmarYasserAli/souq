@@ -1874,4 +1874,5 @@
   'website_url' => 'Website url',
   'Enter your website url' => 'Enter your website url',
   'map_location_url' => 'Map location url',
+  'z' => 'Z',
 );

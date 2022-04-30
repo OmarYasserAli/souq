@@ -23,27 +23,36 @@ class ProductController extends Controller
 {
     public function get_latest_products(Request $request)
     {
-        $products = ProductManager::get_latest_products($request['limit'], $request['offset']);
+
+        $country= request()->country;
+        $city_id= request()->city_id;
+        $products = ProductManager::get_latest_products($request['limit'], $request['offset'],$country , $city_id);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
         return response()->json($products, 200);
     }
 
     public function get_featured_products(Request $request)
     {
-        $products = ProductManager::get_featured_products($request['limit'], $request['offset']);
+        $country= request()->country;
+        $city_id= request()->city_id;
+        $products = ProductManager::get_featured_products($request['limit'], $request['offset'],$country , $city_id);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
         return response()->json($products, 200);
     }
 
     public function get_top_rated_products(Request $request)
     {
-        $products = ProductManager::get_top_rated_products($request['limit'], $request['offset']);
+        $country= request()->country;
+        $city_id= request()->city_id;
+        $products = ProductManager::get_top_rated_products($request['limit'], $request['offset'],$country , $city_id);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
         return response()->json($products, 200);
     }
 
     public function get_searched_products(Request $request)
     {
+        $country= request()->country;
+        $city_id= request()->city_id;
         $validator = Validator::make($request->all(), [
             'name' => 'required',
         ]);
@@ -52,7 +61,7 @@ class ProductController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
 
-        $products = ProductManager::search_products($request['name'], $request['limit'], $request['offset']);
+        $products = ProductManager::search_products($request['name'], $request['limit'], $request['offset'],$country , $city_id);
         if ($products['products'] == null) {
             $products = ProductManager::translated_product_search($request['name'], $request['limit'], $request['offset']);
         }
@@ -71,16 +80,21 @@ class ProductController extends Controller
 
     public function get_best_sellings(Request $request)
     {
-        $products = ProductManager::get_best_selling_products($request['limit'], $request['offset']);
+        $country= request()->country;
+        $city_id= request()->city_id;
+        $products = ProductManager::get_best_selling_products($request['limit'], $request['offset'],$country, $city_id);
         $products['products'] = Helpers::product_data_formatting($products['products'], true);
         return response()->json($products, 200);
     }
 
-    public function get_home_categories()
+    public function get_home_categories(Request $request)
     {
+        $country= request()->country;
+        $city_id= request()->city_id;
         $categories = Category::where('home_status', true)->get();
-        $categories->map(function ($data) {
-            $data['products'] = Helpers::product_data_formatting(CategoryManager::products($data['id']), true);
+        $categories->map(function ($data) use($country, $city_id){
+            $data['products'] = Helpers::product_data_formatting(
+                CategoryManager::products($data['id'],$country , $city_id), true);
             return $data;
         });
         return response()->json($categories, 200);

@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
-    protected $casts = [
+    public static $country;
+    public static $city;
+    protected $casts = [ 
         'user_id' => 'integer',
         'brand_id' => 'integer',
         'min_qty' => 'integer',
@@ -68,6 +70,22 @@ class Product extends Model
     {
         return $query->where('featured_status', 1);
     }
+    public function scopeCountryFilter($query)
+    {
+         $country_code = Product::$country;
+         $city_id = Product::$city;
+        if(isset($country_code))
+            {      
+                $query->whereHas('seller', function ($query) use ($country_code)  { 
+                        return $query->where('country_id', $country_code);
+                });
+                }
+            if(isset($city_id))
+                 $query->whereHas('seller', function ($query) use ($city_id) {
+                    return $query->where('government_id', $city_id);
+                });
+    }
+
 
     public function shop()
     {

@@ -37,8 +37,9 @@ use Illuminate\Support\Facades\Session;
 use function App\CPU\translate;
 use App\Model\Country;
 use App\Model\Government;
-
-
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
+use Illuminate\Support\Facades\Http;
 use App\Model\ShippingType;
 
 class WebController extends Controller
@@ -54,6 +55,8 @@ class WebController extends Controller
 
     public function home()
     {
+
+        
         
         $country_code = request()->country;
         session(['country' => $country_code]);
