@@ -56,6 +56,8 @@ Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_l
     });
 
     Route::get('faq', 'GeneralController@faq');
+    Route::get('all-countries', 'GeneralController@all_countries');
+    Route::get('all-cities', 'GeneralController@all_cities');
 
     Route::group(['prefix' => 'products'], function () {
         Route::get('latest', 'ProductController@get_latest_products');
