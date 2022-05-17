@@ -116,6 +116,31 @@
         text-align: center;
         color:white;
     }
+      /* adapted from http://maxwells.github.io/bootstrap-tags.html */
+  .tag {
+    font-size: 14px;
+    padding: .3em .4em .4em;
+    margin: 0 .1em;
+  }
+  .tag a {
+    color: #bbb;
+    cursor: pointer;
+    opacity: 0.6;
+  }
+  .tag a:hover {
+    opacity: 1.0
+  }
+  .tag .remove {
+    vertical-align: bottom;
+    top: 0;
+  }
+  .tag a {
+    margin: 0 0 0 .3em;
+  }
+  .tag a .glyphicon-white {
+    color: #fff;
+    margin-bottom: 2px;
+  }
 </style>
 @php($announcement=\App\CPU\Helpers::get_business_settings('announcement'))
 @if (isset($announcement) && $announcement['status']==1)
@@ -611,10 +636,12 @@
                                             style="color: white;margin-top: 5px; padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0">
                                         {{ \App\CPU\translate('country')}} 
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                    <div id='country-menu' class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                                         style="min-width: 165px !important; text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
+                                         <input type="text" placeholder="Search.." id="myInput" onkeyup="countryFilterFunction()">
                                         @foreach($countries as $country)
-                                            <a class="dropdown-item" href="{{route('home')}}?country={{$country->code}}">
+                                            <a class="dropdown-item"  data-code=''
+                                            onclick="setCountry('{{ $country->code}}')">
                                                 {{ $country->name}}
                                             </a>
                                             <div class="dropdown-divider"></div>
@@ -637,11 +664,12 @@
                                             style="color: white;margin-top: 5px; padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0">
                                         {{ \App\CPU\translate('government')}} 
                                     </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                    <div id='city-menu' class="dropdown-menu" aria-labelledby="dropdownMenuButton"
                                         style="min-width: 165px !important; text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
-                                      
+                                      <input type="text" placeholder="Search.." id="myInputcity" onkeyup="cityFilterFunction()">
                                         @foreach($governments as $government)
-                                            <a class="dropdown-item" href="{{url()->full()}}&city_id={{$government->id}}">
+                                            <a class="dropdown-item" 
+                                            onclick="setCity('{{ $government->id}}')">
                                                 {{ $government->name}}
                                             </a>
                                             <div class="dropdown-divider"></div>
@@ -662,11 +690,116 @@
 </header>
 <div class="row">
     <div class='container'>
-        Egypt
+        <br>
+        <diV class="row">
+            <div class="mr-2">
+                 @if(session()->has('country'))
+            <span class="badge badge-info" style="font-size: 20px;">
+                    {{session('country')}}
+               <span class="badge badge-info"  id='close_country' onclick="clearCountry()" 
+               style="width: 10px; font-size: 20px; cursor: pointer;">
+                    x
+                </span>
+            </span>
+            @endif
+        </div>
+
+         <div>
+              @if(session()->has('city'))
+            <span class="badge badge-info" style="font-size: 20px;">
+              
+                    {{session('city')}}
+                
+               <span class="badge badge-info"  onclick="clearCity()" id='close_city' 
+               style="width: 10px; cursor: pointer; font-size: 20px;">
+                    x
+                </span>
+            </span>
+            @endif
+        </div>
+        </diV>
+      
     </div>
 </div>
 <script>
 function myFunction() {
-  $('#anouncement').addClass('d-none').removeClass('d-flex')
+    $('#anouncement').addClass('d-none').removeClass('d-flex')
+    }
+    function clearCity(){
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "{{route('clear-city')}}", false);
+        xhttp.send();
+        if( xhttp.responseText) location.reload();;
+    }
+    function clearCountry(){
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "{{route('clear-country')}}", false);
+        xhttp.send();
+        if( xhttp.responseText) location.reload();;
+    }
+    function setCountry(code){
+   
+   
+      var xhttp = new XMLHttpRequest();
+      var r= "{{route('set-country' )}}";
+      // alert(r);
+      xhttp.open("GET", r+'?country='+code, false);
+         xhttp.send();
+      
+        if( xhttp.response) location.reload();;
+    }
+    function setCity(code){
+   
+   
+      var xhttp = new XMLHttpRequest();
+      var r= "{{route('set-city' )}}";
+      // alert(r);
+      xhttp.open("GET", r+'?city='+code, false);
+         xhttp.send();
+      
+        if( xhttp.response) location.reload();;
+    }
+
+function countryFilterFunction() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("country-menu");
+  console.log(div);
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+        a[i].nextElementSibling.style.display = "";
+    } else {
+      a[i].style.display = "none";
+      a[i].nextElementSibling.style.display = "none";
+    }
+     
+    // 
+  }
 }
+function cityFilterFunction() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInputcity");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("city-menu");
+  console.log(div);
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+        a[i].nextElementSibling.style.display = "";
+    } else {
+      a[i].style.display = "none";
+      a[i].nextElementSibling.style.display = "none";
+    }
+     
+    // 
+  }
+}
+    
+    
 </script>

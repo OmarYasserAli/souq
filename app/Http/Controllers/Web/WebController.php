@@ -52,16 +52,50 @@ class WebController extends Controller
         }
         return redirect()->route('home');
     }
+    public function clearCity()
+    {
+        Session::forget('city');
+        return true;
+    }
+    public function clearCountry()
+    {
+        Session::forget('city');
+        Session::forget('country');
+        return true;
+    }
+    public function setCity()
+    {
+       
+        $city_id = request()->city;
+
+        if(isset($city_id))
+        {
+            session(['city' => $city_id]);
+        return true;
+        }
+    }
+    public function setCountry()
+    {
+
+        $country_code = request()->country;
+
+        if(isset($country_code))
+        {
+            session(['country' => $country_code]);
+               return true;
+        }
+    }
 
     public function home()
     {
-
-        
         
         $country_code = request()->country;
-        session(['country' => $country_code]);
+        if(isset($country_code))
+            session(['country' => $country_code]);
+
         $city_id = request()->city_id;
-        session(['city' => $city_id]);
+        if(isset($city_id))
+            session(['city' => $city_id]);
 
 
         $home_categories = Category::where('home_status', true)->priority()->get();
@@ -70,16 +104,16 @@ class WebController extends Controller
             $data['products'] = Product::active()
                 ->where('category_ids', 'like', "%{$id}%");
                
-                if(isset($country_code))
+                if(session()->has('country'))
                 {
                    
                     $data['products'] = $data['products']->whereHas('seller', function ($query) use ($country_code)  { 
-                        return $query->where('country_id', $country_code);
+                        return $query->where('country_id', session('country'));
                     });
                 }
-            if(isset($city_id))
+             if(session()->has('city'))
                 $data['products'] = $data['products']->whereHas('seller', function ($query) use ($city_id) {
-                    return $query->where('government_id', $city_id);
+                    return $query->where('government_id', session('city'));
                 });
                 /*->whereJsonContains('category_ids', ["id" => (string)$data['id']])*/
                 $data['products'] =$data['products']->inRandomOrder()->take(12)->get();
@@ -94,13 +128,13 @@ class WebController extends Controller
         $featured_products = Product::with(['reviews'])->active()
             ->where('featured', 1)
             ->withCount(['order_details']);
-            if(isset($country_code))
+            if(session()->has('country'))
                 $featured_products = $featured_products->whereHas('seller', function ($query) use ($country_code)  { 
-                    return $query->where('country_id', $country_code);
+                    return $query->where('country_id', session('country'));
                 });
-            if(isset($city_id))
+            if(session()->has('city'))
                 $featured_products = $featured_products->whereHas('seller', function ($query) use ($city_id) {
-                    return $query->where('government_id', $city_id);
+                    return $query->where('government_id', session('city'));
                 });
             $featured_products = $featured_products->orderBy('order_details_count', 'DESC')
             ->take(12)
@@ -108,13 +142,13 @@ class WebController extends Controller
         //end
        
         $latest_products = Product::with(['reviews']);
-        if(isset($country_code))
+        if(session()->has('country'))
             $latest_products = $latest_products->whereHas('seller', function ($query) use ($country_code)  { 
-                return $query->where('country_id', $country_code);
+                return $query->where('country_id', session('country'));
             });
-        if(isset($city_id))
+        if(session()->has('city'))
             $latest_products = $latest_products->whereHas('seller', function ($query) use ($city_id) {
-                return $query->where('government_id', $city_id);
+                return $query->where('government_id', session('city'));
             });
         $latest_products=$latest_products->active()->orderBy('id', 'desc')->take(8)->get();
 
@@ -150,8 +184,8 @@ class WebController extends Controller
         }
         $countries= Country::all();
         $governments= null;
-        if(isset($country_code))
-            $governments= country::where('code',$country_code)->get()[0]->governments()->get();
+        if(session()->has('country'))
+            $governments= country::where('code',session('country'))->get()[0]->governments()->get();
         $deal_of_the_day = DealOfTheDay::join('products', 'products.id', '=', 'deal_of_the_days.product_id')->select('deal_of_the_days.*', 'products.unit_price')->where('deal_of_the_days.status', 1)->first();
 
         return view('web-views.home', compact('featured_products', 'topRated', 'bestSellProduct', 'latest_products', 'categories', 'brands', 'deal_of_the_day', 'top_sellers', 'home_categories','countries','governments'));

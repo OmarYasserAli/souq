@@ -12,12 +12,31 @@ class GeneralController extends Controller
         return response()->json(HelpTopic::orderBy('ranking')->get(),200);
     }
     public function all_cities(){
-       $governments= Government::all('id','name');
-        return response()->json($governments,200);
+
+       if(isset(request()->country_id))
+         $governments=Government::where('country_id', request()->country_id)->select('id','name')->get();
+      elseif(isset(request()->country_code))
+        {
+            $country= Country::where('code',request()->country_code)->first();
+          $governments=Government::where('country_id', $country->id)->select('id','name')->get();  
+        } 
+        else
+            $governments= Government::all('id','name');
+       
+        return response()->json(
+            [
+                'status'=>'200',
+                'count'=>$governments->count(),
+                'data'=>$governments,
+            ]);
     }
     public function all_countries(){
-    	$countries= Country::all('name','code');
-        return response()->json($countries,200);
+    	$countries= Country::all('name','code','id');
+        return response()->json([
+            'status'=>200,
+            'count'=>$countries->count(),
+            'data'=>$countries
+        ]);
     }
 
 
