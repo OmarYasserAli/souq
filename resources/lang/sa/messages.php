@@ -1298,4 +1298,7 @@
   'optional' => 'Optional',
   'waiting_for_location' => 'Waiting for location',
   'updated_successfully!' => 'Updated successfully!',
+    'otp_not_found' => 'Otp not found',
+  'otp_verified' => 'oOtp verified',
+
 );
