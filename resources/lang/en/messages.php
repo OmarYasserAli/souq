@@ -1875,4 +1875,8 @@
   'Enter your website url' => 'Enter your website url',
   'map_location_url' => 'Map location url',
   'z' => 'Z',
+  'otp_not_found' => 'Otp not found',
+  'otp_verified' => 'oOtp verified',
+
+
 );
