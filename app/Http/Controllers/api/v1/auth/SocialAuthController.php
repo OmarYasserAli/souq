@@ -84,7 +84,7 @@ class SocialAuthController extends Controller
             if ($token != null) {
                 //
                 $client = new Client();
-                $response = $client->request('post','http://65.20.167.141:100/laravel_application/public/api/login',[
+                $response = $client->request('post','https://services.tshoop.net/services/public/api/login',[
                     'form_params'=>[
                         "email"=>$email,
                         "password"=>$data['id']
