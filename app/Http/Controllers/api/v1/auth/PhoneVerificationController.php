@@ -70,6 +70,7 @@ class PhoneVerificationController extends Controller
                 $user = User::where(['temporary_token' => $request['temporary_token']])->first();
                 $user->phone = $request['phone'];
                 $user->is_phone_verified = 1;
+
                 $user->save();
                 $verify->delete();
             } catch (\Exception $exception) {
@@ -85,7 +86,8 @@ class PhoneVerificationController extends Controller
                     "name"=>$user->f_name,
                     "email"=>$user->email,
                     "phone_number"=>$user->phone,
-                    "password"=>$user->password_service
+                    "password"=>$user->password_service,
+                    "phone_verified_at"=>"2022/5/5"
                 ]
                 ]);
                 $body = $response->getBody();
