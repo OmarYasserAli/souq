@@ -72,7 +72,7 @@ class SocialAuthController extends Controller
                 $user->temporary_token = Str::random(40);
                 $user->save();
             }
-            if(!isset($user->phone))
+            if(!isset($user->phone) || $user->phone=='')
             {
                 return response()->json([
                     'token_type' => 'update phone number',
