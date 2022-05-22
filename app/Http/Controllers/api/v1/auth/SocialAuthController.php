@@ -61,27 +61,44 @@ class SocialAuthController extends Controller
                     'email' => $email,
                     'phone' => '',
                     'password' => bcrypt($data['id']),
+                    'password_service' => $data['id'],
                     'is_active' => 1,
                     'login_medium' => $request['medium'],
                     'social_id' => $data['id'],
                     'is_phone_verified' => 0,
                     'is_email_verified' => 1,
-                    'temporary_token' => Str::random(40)
+                    'temporary_token' => Str::random(40),
                 ]);
             } else {
                 $user->temporary_token = Str::random(40);
                 $user->save();
             }
-            if(!isset($user->phone) || $user->phone=='')
+            if( $user->phone == "" )
             {
                 return response()->json([
-                    'token_type' => 'update phone number',
-                    'temporary_token' => $user->temporary_token ]);
+                    ['token_type' => 'update phone number',
+                    'temporary_token' => $user->temporary_token ]]);
             }
 
             $token = self::login_process_passport($user, $user->email, $data['id']);
             if ($token != null) {
-                return response()->json(['token' => $token]);
+                //
+                $client = new Client();
+                $response = $client->request('post','http://65.20.167.141:100/laravel_application/public/api/login',[
+                    'form_params'=>[
+                        "email"=>$email,
+                        "password"=>$data['id']
+                    ]
+                    ]);
+                    $body = $response->getBody();
+                    $data = json_decode($body);
+                    if( $data->success == true )
+                    {
+        
+                       $var_service = $data->data;
+                    }
+                return response()->json([
+                    ['token' => $token],$var_service]);
             }
             return response()->json(['error_message' => translate('Customer_not_found_or_Account_has_been_suspended')]);
         }

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use function App\CPU\translate;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Crypt;
 
 class PhoneVerificationController extends Controller
 {
@@ -35,9 +37,9 @@ class PhoneVerificationController extends Controller
         }
 
         // $token = rand(1000, 9999);
-         $token = 123456;
+        $token = '1234';
         DB::table('phone_or_email_verifications')->insert([
-            'phone_or_email' => $request['phone'], 
+            'phone_or_email' => $request['phone'],
             'token' => $token,
             'created_at' => now(),
             'updated_at' => now(),
@@ -63,7 +65,6 @@ class PhoneVerificationController extends Controller
 
         $verify = PhoneOrEmailVerification::where(['phone_or_email' => $request['phone'], 'token' => $request['otp']])->first();
 
-
         if (isset($verify)) {
             try {
                 $user = User::where(['temporary_token' => $request['temporary_token']])->first();
@@ -76,11 +77,37 @@ class PhoneVerificationController extends Controller
                     'message' => translate('temporary_token_mismatch'),
                 ], 200);
             }
-
+          
             $token = $user->createToken('LaravelAuthApp')->accessToken;
+            $client = new Client();
+            $response = $client->request('post','http://65.20.167.141:100/laravel_application/public/api/register',[
+                'form_params'=>[
+                    "name"=>$user->f_name,
+                    "email"=>$user->email,
+                    "phone_number"=>$user->phone,
+                    "password"=>$user->password_service
+                ]
+                ]);
+                $body = $response->getBody();
+                $data = json_decode($body);
+    
+                if( $data->success == true )
+                {
+    
+                   $var_service = $data->data;
+                }
             return response()->json([
-                'message' => translate('otp_verified'),
-                'token' => $token
+                
+                [
+                    'token' => $token,
+                    'message' => translate('otp_verified'),
+                    
+                ],
+                    
+                    $var_service
+
+
+                
             ], 200);
         }
 
