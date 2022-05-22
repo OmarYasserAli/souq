@@ -81,6 +81,7 @@ class SocialAuthController extends Controller
             }
 
             $token = self::login_process_passport($user, $user->email, $data['id']);
+            
             if ($token != null) {
                 //
                 $client = new Client();

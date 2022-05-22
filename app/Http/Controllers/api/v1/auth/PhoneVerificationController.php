@@ -80,7 +80,7 @@ class PhoneVerificationController extends Controller
           
             $token = $user->createToken('LaravelAuthApp')->accessToken;
             $client = new Client();
-            $response = $client->request('post','http://65.20.167.141:100/laravel_application/public/api/register',[
+            $response = $client->request('post','https://services.tshoop.net/services/public/api/register',[
                 'form_params'=>[
                     "name"=>$user->f_name,
                     "email"=>$user->email,
