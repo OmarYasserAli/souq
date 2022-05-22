@@ -61,7 +61,7 @@ class SocialAuthController extends Controller
                     'email' => $email,
                     'phone' => '',
                     'password' => bcrypt($data['id']),
-                    'password_service' => $data['id'],
+                    'password_service' => '1515',
                     'is_active' => 1,
                     'login_medium' => $request['medium'],
                     'social_id' => $data['id'],
@@ -81,7 +81,7 @@ class SocialAuthController extends Controller
             }
 
             $token = self::login_process_passport($user, $user->email, $data['id']);
-            
+
             if ($token != null) {
                 //
                 $client = new Client();
