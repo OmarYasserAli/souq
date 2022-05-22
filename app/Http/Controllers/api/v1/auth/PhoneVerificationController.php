@@ -34,9 +34,10 @@ class PhoneVerificationController extends Controller
             ], 200);
         }
 
-        $token = rand(1000, 9999);
+        // $token = rand(1000, 9999);
+         $token = 123456;
         DB::table('phone_or_email_verifications')->insert([
-            'phone_or_email' => $request['phone'],
+            'phone_or_email' => $request['phone'], 
             'token' => $token,
             'created_at' => now(),
             'updated_at' => now(),
@@ -61,6 +62,7 @@ class PhoneVerificationController extends Controller
         }
 
         $verify = PhoneOrEmailVerification::where(['phone_or_email' => $request['phone'], 'token' => $request['otp']])->first();
+
 
         if (isset($verify)) {
             try {
