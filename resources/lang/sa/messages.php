@@ -1300,5 +1300,6 @@
   'updated_successfully!' => 'Updated successfully!',
     'otp_not_found' => 'Otp not found',
   'otp_verified' => 'oOtp verified',
+  'sent'=>'تم الارسال'
 
 );
