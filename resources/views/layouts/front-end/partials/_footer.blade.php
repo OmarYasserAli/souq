@@ -221,7 +221,7 @@
     <div class="container text-center">
         <div class="row d-flex align-items-center footer-end">
             <div class="col-md-12 mt-3">
-                <p class="text-center" style="font-size: 12px;">CopyRight United South@2022</p>
+                <p class="text-center" style="font-size: 12px;">CopyRight United South Technology@2022</p>
             </div>
         </div>
         <!-- Grid row -->
