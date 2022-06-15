@@ -16,7 +16,7 @@ class ProductManager
         return Product::active()->with(['rating'])->where('id', $id)->first();
     }
 
-    public static function get_latest_products($limit = 10, $offset = 1 ,$country_code , $city_id)
+    public static function get_latest_products($limit = 10, $offset = 1 ,$country_code =null, $city_id=null)
     {
         Product::$city=$city_id;
         Product::$country=$country_code;
@@ -32,7 +32,7 @@ class ProductManager
         ];
     }
 
-    public static function get_featured_products($limit = 10, $offset = 1,$country_code , $city_id)
+    public static function get_featured_products($limit = 10, $offset = 1,$country_code =null, $city_id=null)
     {
         Product::$city=$city_id;
         Product::$country=$country_code;
@@ -50,7 +50,7 @@ class ProductManager
         ];
     }
 
-    public static function get_top_rated_products($limit = 10, $offset = 1 ,$country_code , $city_id)
+    public static function get_top_rated_products($limit = 10, $offset = 1 ,$country_code =null, $city_id=null)
     {
         // $reviews = Review::with('product')
         //     ->whereHas('product', function ($query) {
@@ -82,7 +82,7 @@ class ProductManager
         ];
     }
 
-    public static function get_best_selling_products($limit = 10, $offset = 1,$country_code , $city_id)
+    public static function get_best_selling_products($limit = 10, $offset = 1,$country_code =null, $city_id=null)
     {
         Product::$city=$city_id;
         Product::$country=$country_code;
@@ -119,7 +119,7 @@ class ProductManager
             ->get();
     }
 
-    public static function search_products($name, $limit = 10, $offset = 1)
+    public static function search_products($name, $limit = 10, $offset = 1,$country_code =null, $city_id=null)
     {
         /*$key = explode(' ', $name);*/
         Product::$city=$city_id;
