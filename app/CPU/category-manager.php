@@ -5,7 +5,7 @@ namespace App\CPU;
 use App\Model\Category;
 use App\Model\Product;
 
-class CategoryManager
+class CategoryManager 
 {
     public static function parents()
     {
@@ -19,7 +19,7 @@ class CategoryManager
         return $x;
     }
 
-    public static function products($category_id,$country_code , $city_id)
+    public static function products($category_id,$country_code= null , $city_id=null)
     {
         Product::$city=$city_id;
         Product::$country=$country_code;
