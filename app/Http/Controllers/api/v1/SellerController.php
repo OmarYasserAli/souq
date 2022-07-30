@@ -14,10 +14,11 @@ use App\Model\Review;
 
 class SellerController extends Controller
 {
+    /**/
     public function get_seller_info(Request $request)
     {
         $data=[];
-        $seller = Seller::with(['shop'])->where(['id' => $request['seller_id']])->first(['id', 'f_name', 'l_name', 'phone', 'image']);
+        $seller = Seller::with(['shop'])->where(['id' => $request['seller_id']])->first(['id', 'f_name', 'l_name', 'phone', 'image','facebook','active_facebook','twitter','active_twitter','instagram','active_instagram','tiktok','active_tiktok','active_whatsapp']);
         
         $product_ids = Product::where(['added_by' => 'seller', 'user_id' => $request['seller_id']])->pluck('id')->toArray();
                 

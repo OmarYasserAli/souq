@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use PHPUnit\Exception;
 use function App\CPU\translate;
-
+  
 class ProductController extends Controller
 {
     public function list(Request $request)
@@ -349,7 +349,7 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->user_id = $seller->id;
         $product->added_by = "seller";
-
+//dd(Helpers::default_lang(), $request->lang);
         $product->name = $request->name[array_search(Helpers::default_lang(), $request->lang)];
         $product->slug = Str::slug($request->name[array_search(Helpers::default_lang(), $request->lang)], '-') . '-' . Str::random(6);
 
