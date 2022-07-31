@@ -68,6 +68,7 @@ Route::group(['namespace' => 'api\v2', 'prefix' => 'v2', 'middleware' => ['api_l
 
         Route::group(['prefix' => 'auth', 'namespace' => 'auth'], function () {
             Route::post('login', 'LoginController@login');
+            Route::post('register', 'RegisterController@store');
         });
     });
     Route::post('ls-lib-update', 'LsLibController@lib_update');
