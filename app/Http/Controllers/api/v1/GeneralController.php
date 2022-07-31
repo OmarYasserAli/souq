@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Model\HelpTopic;
 use App\Model\Country;
 use App\Model\Government;
+use Illuminate\Http\Request;
+
 class GeneralController extends Controller
 {
     public function faq(){
@@ -37,6 +39,13 @@ class GeneralController extends Controller
             'count'=>$countries->count(),
             'data'=>$countries
         ]);
+    }
+
+    public function getCitiesFromCountry(Request $request){
+        $country=Country::where('code',$request->country_code)->first();
+        $data['governments'] = Government::where("country_id",$country->id)
+                    ->get(["name","id"]);
+        return response()->json($data);
     }
 
 

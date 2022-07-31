@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'api\v2', 'prefix' => 'v2', 'middleware' => ['api_lang']], function () {
+   
     Route::group(['prefix' => 'seller', 'namespace' => 'seller'], function () {
 
         Route::get('seller-info', 'SellerController@seller_info');
