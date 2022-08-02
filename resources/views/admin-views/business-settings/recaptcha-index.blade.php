@@ -39,14 +39,14 @@
                                 <div class="form-group mb-2 mt-2">
                                     <input type="radio" name="status"
                                            value="1" {{isset($config) && $config['status']==1?'checked':''}}>
-                                    <label style="padding-left: 10px">{{\App\CPU\translate('active')}}</label>
+                                    <label style="padding-left: 10px">{{\App\CPU\translate('inactive')}}</label>
                                     <br>
                                 </div>
                                 <div class="form-group mb-2">
                                     <input type="radio" name="status"
                                            value="0" {{isset($config) && $config['status']==0?'checked':''}}>
                                     <label
-                                        style="padding-left: 10px">{{\App\CPU\translate('inactive')}} </label>
+                                        style="padding-left: 10px">{{\App\CPU\translate('active')}} </label>
                                     <br>
                                 </div>
                                 <div class="form-group mb-2">

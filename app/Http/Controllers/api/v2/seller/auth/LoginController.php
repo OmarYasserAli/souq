@@ -31,6 +31,7 @@ class LoginController extends Controller
         ];
 
         $seller = Seller::where(['email' => $request['email']])->first();
+
         if (isset($seller) && $seller['status'] == 'approved' && auth('seller')->attempt($data)) {
             $token = Str::random(50);
             Seller::where(['id' => auth('seller')->id()])->update(['auth_token' => $token]);
@@ -48,12 +49,17 @@ class LoginController extends Controller
                 ]);
             }
             return response()->json(['token' => $token], 200);
-        } else {
+        }
+        elseif(isset($seller) && $seller['status'] != 'approved' && auth('seller')->attempt($data)) {
             $errors = [];
             array_push($errors, ['code' => 'auth-001', 'message' => translate('Invalid credential or account no verified yet')]);
             return response()->json([
                 'errors' => $errors
             ], 401);
+        }else{
+            return response()->json([
+                'message' =>  translate('we have an error in email or password')
+            ], 203);
         }
     }
 }
