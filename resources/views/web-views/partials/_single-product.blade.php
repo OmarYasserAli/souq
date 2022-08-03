@@ -7,7 +7,7 @@
                class="badge badge-danger stock-out">{{\App\CPU\translate('stock_out')}}</label>
     @endif
 
-    <div class="card-header inline_product clickable" style="cursor: pointer;max-height: 193px;min-height: 193px">
+    <div class="card-header inline_product clickable" style="cursor: pointer;max-height: 193px;min-height: 193px ;overflow: hidden;width: 100%">
         @if($product->discount > 0)
             <div class="d-flex" style="right: 0;top:0;position: absolute">
                     <span class="for-discoutn-value pr-1 pl-1">
@@ -25,7 +25,7 @@
             </div>
         @endif
         <div class="d-flex d-block center-div element-center" style="cursor: pointer">
-            <a href="{{route('product',$product->slug)}}">
+            <a href="{{route('product',$product->slug)}}" style ="width: 100%">
                 <img src="{{\App\CPU\ProductManager::product_image_path('thumbnail')}}/{{$product['thumbnail']}}"
                      onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                      style="width: 100%;max-height: 215px!important;">

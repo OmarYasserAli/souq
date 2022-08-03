@@ -174,6 +174,7 @@ class LanguageController extends Controller
 
     public function translate($lang)
     {
+        //dd($lang);
         $full_data = include(base_path('resources/lang/' . $lang . '/messages.php'));
         $lang_data = [];
         ksort($full_data);
@@ -193,6 +194,7 @@ class LanguageController extends Controller
 
     public function translate_submit(Request $request, $lang)
     {
+        //dd('d');
         $full_data = include(base_path('resources/lang/' . $lang . '/messages.php'));
         $full_data[$request['key']] = $request['value'];
         $str = "<?php return " . var_export($full_data, true) . ";";
