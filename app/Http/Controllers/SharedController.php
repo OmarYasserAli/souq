@@ -13,6 +13,7 @@ class SharedController extends Controller
 {
     public function lang($local)
     {
+
         $direction = 'ltr';
         $language = BusinessSetting::where('type', 'language')->first();
         foreach (json_decode($language['value'], true) as $key => $data) {
@@ -24,6 +25,7 @@ class SharedController extends Controller
         Helpers::language_load();
         session()->put('local', $local);
         Session::put('direction', $direction);
+        //dd(\App::getLocale());
         return redirect()->back();
     }
 }

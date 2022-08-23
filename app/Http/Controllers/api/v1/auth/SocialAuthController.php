@@ -85,7 +85,7 @@ class SocialAuthController extends Controller
             if ($token != null) {
                 //
                 $client = new Client();
-                $response = $client->request('post','https://services.tshoop.net/services/public/api/login',[
+                $response = $client->request('post','https://trendservices.ust.center/public/public/api/login',[
                     'form_params'=>[
                         "email"=>$email,
                         "password"=>$data['id']

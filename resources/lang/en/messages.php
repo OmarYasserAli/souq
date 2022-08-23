@@ -498,7 +498,7 @@
   'new' => 'New',
   'Seller_details' => 'Seller details',
   'Back_to_seller_list' => 'Back to seller list',
-  '#SL' => 'SL',
+  '#SL' => 'سل',
   'paid' => 'Paid',
   'products' => 'Products',
   'No_data_to_show' => 'No data to show',
@@ -1877,6 +1877,4 @@
   'z' => 'Z',
   'otp_not_found' => 'Otp not found',
   'otp_verified' => 'oOtp verified',
-
-
 );

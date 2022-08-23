@@ -48,6 +48,15 @@ class GeneralController extends Controller
         return response()->json($data);
     }
 
+    public function لgetMapLocation(Request $request){
+        $country=Country::where('code',$request->country_code)->first();
+        $data['governments'] = Government::where("country_id",$country->id)
+                    ->get(["name","id"]);
+        return response()->json($data);
+    }
+
+
+
 
    
 
