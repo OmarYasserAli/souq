@@ -20,6 +20,7 @@ class MapApiController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
         $api_key = Helpers::get_business_settings('map_api_key');
+        $api_key = 'AIzaSyDfnUAEQtTSJ1ca2GZKF0_MPc16K6MixlI';
         $response = Http::get('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' . $request['search_text'] . '&key=' . $api_key);
         return $response->json();
     }
@@ -63,7 +64,10 @@ class MapApiController extends Controller
             return response()->json(['errors' => Helpers::error_processor($validator)], 403);
         }
         $api_key = Helpers::get_business_settings('map_api_key');
-        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $request->lat . ',' . $request->lng . '&key=' . $api_key);
+        $api_key = 'AIzaSyDfnUAEQtTSJ1ca2GZKF0_MPc16K6MixlI';
+        $response = Http::get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' . $request->lat . ',' . $request->lng . '&key=' . $api_key.'&language=us_en&sensor=false');
+        $res = (($response->json()));
+        $country_code = ($res['results'][0]['address_components'][3]['short_name']);
         return $response->json();
     }
 }

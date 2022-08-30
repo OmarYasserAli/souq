@@ -164,11 +164,14 @@ Route::group(['namespace' => 'api\v1', 'prefix' => 'v1', 'middleware' => ['api_l
         Route::get('apply', 'CouponController@apply');
     });
 
+    Route::get('get-location', 'MapApiController@geocode_api');
     //map api
     Route::group(['prefix' => 'mapapi'], function () {
         Route::get('place-api-autocomplete', 'MapApiController@place_api_autocomplete');
         Route::get('distance-api', 'MapApiController@distance_api');
         Route::get('place-api-details', 'MapApiController@place_api_details');
         Route::get('geocode-api', 'MapApiController@geocode_api');
+        
+        
     });
 });

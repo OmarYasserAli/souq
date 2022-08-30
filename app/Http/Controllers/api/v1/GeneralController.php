@@ -48,14 +48,23 @@ class GeneralController extends Controller
         return response()->json($data);
     }
 
-    public function لgetMapLocation(Request $request){
+    public function getMapLocation(Request $request){
         $country=Country::where('code',$request->country_code)->first();
         $data['governments'] = Government::where("country_id",$country->id)
                     ->get(["name","id"]);
         return response()->json($data);
     }
 
-
+    public function getLocationFromMap(){
+        if(!isset(request()->latlng)) return false;
+        $url="https://maps.googleapis.com/maps/api/geocode/json?
+        latlng="+request()->latlng+"&sensor=true
+        &key=AIzaSyDfnUAEQtTSJ1ca2GZKF0_MPc16K6MixlI&language=pt_BR";
+        $client = new GuzzleHttp\Client();
+        $res = $client->get($url);
+        echo $res->getStatusCode(); // 200
+        echo $res->getBody();
+    }
 
 
    
