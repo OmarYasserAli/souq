@@ -16,7 +16,7 @@ class SellerController extends Controller
 {
     /**/
     public function get_seller_info(Request $request)
-    {
+    {   
         $data=[];
         $seller = Seller::with(['shop'])->where(['id' => $request['seller_id']])->first(['id', 'f_name', 'l_name', 'phone', 'image','facebook','active_facebook','twitter','active_twitter','instagram','active_instagram','tiktok','active_tiktok','active_whatsapp']);
         
@@ -30,6 +30,7 @@ class SellerController extends Controller
         $data['avg_rating']= round($avg_rating);
         $data['total_review']=  $total_review;
         $data['total_order']= $total_order;
+        $data['total_product']= count($product_ids);
 
         return response()->json($data, 200);
     }
