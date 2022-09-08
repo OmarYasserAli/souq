@@ -66,7 +66,7 @@ Route::group(['namespace' => 'Admin', 'prefix' => 'admin', 'as' => 'admin.'], fu
             Route::post('day-update/{id}', 'DealController@day_update');
             Route::get('day-delete/{id}', 'DealController@day_delete')->name('day-delete');
 
-            Route::get('update/{id}', 'DealController@edit')->name('update');
+            Route::get('update/{id}', 'DealController@edit')->name('updateDeal');
             Route::get('edit/{id}', 'DealController@feature_edit')->name('edit');
 
             Route::post('update/{id}', 'DealController@update')->name('update');

@@ -162,7 +162,7 @@
                                         </label>
                                     </td>
                                     <td>
-                                        <a href="{{route('admin.deal.update',[$deal['id']])}}"
+                                        <a href="{{route('admin.deal.updateDeal',[$deal['id']])}}"
                                            class="btn btn-primary btn-sm">
                                             {{\App\CPU\translate('Edit')}}
                                         </a>
